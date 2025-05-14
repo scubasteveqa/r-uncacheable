@@ -34,11 +34,12 @@ server <- function(input, output, session) {
       pkg_name <- pkg_info$Package[i]
       pkg_version <- pkg_info$Version[i]
       
-      # Create a single span with id attribute for locator that includes package name and version
+      # Create a single span with id attribute and text that includes both package name and version
+      # This ensures Playwright can locate by text using both package name and version
       div(
         class = "package-item",
         span(
-          id = paste0("pkg-", pkg_name, "-", pkg_version),
+          id = paste0("pkg-", pkg_name),
           paste0(pkg_name, ": ", pkg_version)
         )
       )
