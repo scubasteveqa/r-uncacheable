@@ -1,5 +1,6 @@
 library(shiny)
 library(bslib)
+library(regexcite)
 
 ui <- page_sidebar(
   title = "Installed Packages",
