@@ -1,6 +1,5 @@
 library(shiny)
 library(bslib)
-library(regexcite)
 
 ui <- page_sidebar(
   title = "Installed Packages",
@@ -11,13 +10,14 @@ ui <- page_sidebar(
   card(
     card_header("Installed R Packages"),
     card_body(
-      verbatimTextOutput("packageInfo")
+      uiOutput("packageInfo")
     )
   )
 )
 
 server <- function(input, output, session) {
-  output$packageInfo <- renderPrint({
+  # Generate the package information as HTML elements
+  output$packageInfo <- renderUI({
     # Get installed packages info
     pkgs <- installed.packages()
     # Create a data frame with package names and versions
@@ -28,8 +28,28 @@ server <- function(input, output, session) {
     )
     # Sort by package name
     pkg_info <- pkg_info[order(pkg_info$Package), ]
-    # Print the information
-    print(pkg_info, row.names = FALSE)
+    
+    # Create a list of HTML elements for each package
+    package_elements <- lapply(1:nrow(pkg_info), function(i) {
+      pkg_name <- pkg_info$Package[i]
+      pkg_version <- pkg_info$Version[i]
+      
+      # Create a div with id attributes for locators
+      div(
+        class = "package-item",
+        id = paste0("pkg-", pkg_name),
+        span(pkg_name, class = "package-name", id = paste0("name-", pkg_name)),
+        ": ",
+        span(pkg_version, class = "package-version", id = paste0("version-", pkg_name))
+      )
+    })
+    
+    # Wrap all package elements in a div with some styling
+    div(
+      id = "packages-container",
+      style = "font-family: monospace; line-height: 1.5;",
+      package_elements
+    )
   })
 }
 
