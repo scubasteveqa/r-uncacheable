@@ -34,13 +34,13 @@ server <- function(input, output, session) {
       pkg_name <- pkg_info$Package[i]
       pkg_version <- pkg_info$Version[i]
       
-      # Create a div with id attributes for locators
+      # Create a single span with id attribute for locator
       div(
         class = "package-item",
-        id = paste0("pkg-", pkg_name),
-        span(pkg_name, class = "package-name", id = paste0("name-", pkg_name)),
-        ": ",
-        span(pkg_version, class = "package-version", id = paste0("version-", pkg_name))
+        span(
+          id = paste0("pkg-", pkg_name),
+          paste0(pkg_name, ": ", pkg_version)
+        )
       )
     })
     
